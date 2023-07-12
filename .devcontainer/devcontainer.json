@@ -1,0 +1,10 @@
+{
+    "name": "snake-game",
+    "workspaceFolder": "/app",
+    "workspaceMount": "source=${localWorkspaceFolder},target=/app,type=bind,consistency=cached",
+    "image": "python:3.11.4-bullseye",
+    "runArgs": [
+        "--name",
+        "snake-game"
+    ]
+}
