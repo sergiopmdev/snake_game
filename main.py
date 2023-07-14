@@ -1,5 +1,6 @@
+from game import SnakeGame
+
+
 if __name__ == "__main__":
-    # TODO 
-    # This is where we are going to run the game
-    
-    pass
+    snake_game = SnakeGame()
+    snake_game.run_game()
