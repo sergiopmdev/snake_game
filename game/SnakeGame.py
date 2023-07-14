@@ -1,6 +1,8 @@
 import pygame
 from pygame.event import Event
 
+from game.constants import Dimensions
+
 
 class SnakeGame:
     """
@@ -28,19 +30,34 @@ class SnakeGame:
         """
 
         self._init_game()
+        self._draw_grid()
 
         while self.game_running:
             for event in pygame.event.get():
                 self._check_game_is_over(event=event)
+            pygame.display.update()
+            self._clock.tick(10)
+
+    def _draw_grid(self) -> None:
+        """
+        Draw the grid of squares inside the interface
+        """
+
+        BLOCK_SIZE = 50
+
+        for x in range(0, Dimensions.WIDTH, BLOCK_SIZE):
+            for y in range(0, Dimensions.HEIGHT, BLOCK_SIZE):
+                grid = pygame.Rect(x, y, BLOCK_SIZE, BLOCK_SIZE)
+                pygame.draw.rect(self._display, "grey", grid, 1)
 
     def _init_game(self) -> None:
         """
         Inject initial properties of the video game
         """
 
-        pygame.time.Clock()
+        self._clock = pygame.time.Clock()
+        self._display = pygame.display.set_mode((Dimensions.WIDTH, Dimensions.HEIGHT))
 
-        self.display = pygame.display.set_mode(size=(600, 600))
         pygame.display.set_caption("Snake Game")
 
     def _check_game_is_over(self, event: Event) -> None:
