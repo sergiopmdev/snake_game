@@ -38,6 +38,7 @@ class SnakeGame:
         while self.game_running:
             for event in pygame.event.get():
                 self._check_game_is_over(event=event)
+                self._snake.change_direction(event=event)
 
             self._draw_grid()
             self._plot_snake()

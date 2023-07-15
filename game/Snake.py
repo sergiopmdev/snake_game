@@ -1,4 +1,6 @@
+import pygame
 from pygame import Rect
+from pygame.event import Event
 
 from game.constants import Interface
 
@@ -66,3 +68,29 @@ class Snake:
         self.head.y += self.y_dir * Interface.BLOCK_SIZE
 
         self.body.remove(self.head)
+
+    def change_direction(self, event: Event) -> None:
+        """
+        Change direction of the snake
+        according to the keys on the keypad
+
+        Parameters
+        ----------
+        event : Event
+            Event in which it is checked whether
+            a motion key has been activated
+        """
+
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_UP:
+                self.x_dir = 0
+                self.y_dir = -1 if self.y_dir != 1 else self.y_dir
+            elif event.key == pygame.K_RIGHT:
+                self.x_dir = 1 if self.x_dir != -1 else self.x_dir
+                self.y_dir = 0
+            elif event.key == pygame.K_DOWN:
+                self.x_dir = 0
+                self.y_dir = 1 if self.y_dir != -1 else self.y_dir
+            elif event.key == pygame.K_LEFT:
+                self.x_dir = -1 if self.x_dir != 1 else self.x_dir
+                self.y_dir = 0
