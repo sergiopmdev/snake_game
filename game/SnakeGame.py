@@ -1,7 +1,8 @@
 import pygame
 from pygame.event import Event
 
-from game.constants import Dimensions
+from game.constants import Dimensions, Interface
+from game.Snake import Snake
 
 
 class SnakeGame:
@@ -32,23 +33,18 @@ class SnakeGame:
         self._init_game()
         self._draw_grid()
 
+        self._snake = Snake()
+
         while self.game_running:
             for event in pygame.event.get():
                 self._check_game_is_over(event=event)
+
+            self._draw_grid()
+            self._plot_snake()
+            self._snake.move()
+
             pygame.display.update()
             self._clock.tick(10)
-
-    def _draw_grid(self) -> None:
-        """
-        Draw the grid of squares inside the interface
-        """
-
-        BLOCK_SIZE = 50
-
-        for x in range(0, Dimensions.WIDTH, BLOCK_SIZE):
-            for y in range(0, Dimensions.HEIGHT, BLOCK_SIZE):
-                grid = pygame.Rect(x, y, BLOCK_SIZE, BLOCK_SIZE)
-                pygame.draw.rect(self._display, "grey", grid, 1)
 
     def _init_game(self) -> None:
         """
@@ -59,6 +55,18 @@ class SnakeGame:
         self._display = pygame.display.set_mode((Dimensions.WIDTH, Dimensions.HEIGHT))
 
         pygame.display.set_caption("Snake Game")
+
+    def _draw_grid(self) -> None:
+        """
+        Draw the grid of squares inside the interface
+        """
+
+        self._display.fill("black")
+
+        for x in range(0, Dimensions.WIDTH, Interface.BLOCK_SIZE):
+            for y in range(0, Dimensions.HEIGHT, Interface.BLOCK_SIZE):
+                square = pygame.Rect(x, y, Interface.BLOCK_SIZE, Interface.BLOCK_SIZE)
+                pygame.draw.rect(self._display, "grey", square, 1)
 
     def _check_game_is_over(self, event: Event) -> None:
         """
@@ -73,3 +81,14 @@ class SnakeGame:
 
         if event.type == pygame.QUIT:
             self.game_running = False
+
+    def _plot_snake(self) -> None:
+        """
+        Draw the snake in its corresponding
+        position in the video game UI grid
+        """
+
+        pygame.draw.rect(self._display, "green", self._snake.head)
+
+        for square in self._snake.body:
+            pygame.draw.rect(self._display, "green", square)
