@@ -39,10 +39,12 @@ class SnakeGame:
             for event in pygame.event.get():
                 self._check_game_is_over(event=event)
 
+            self._draw_grid()
+            self._plot_snake()
+            self._snake.move()
+
             pygame.display.update()
             self._clock.tick(10)
-
-            self._plot_snake()
 
     def _init_game(self) -> None:
         """
@@ -58,6 +60,8 @@ class SnakeGame:
         """
         Draw the grid of squares inside the interface
         """
+
+        self._display.fill("black")
 
         for x in range(0, Dimensions.WIDTH, Interface.BLOCK_SIZE):
             for y in range(0, Dimensions.HEIGHT, Interface.BLOCK_SIZE):
