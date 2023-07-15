@@ -43,6 +43,7 @@ class SnakeGame:
             self._draw_grid()
             self._plot_snake()
             self._snake.move()
+            self._check_if_snake_out_of_bounds()
 
             pygame.display.update()
             self._clock.tick(10)
@@ -93,3 +94,22 @@ class SnakeGame:
 
         for square in self._snake.body:
             pygame.draw.rect(self._display, "green", square)
+
+    def _check_if_snake_out_of_bounds(self) -> None:
+        """
+        Checks if the snake is out of bounds
+        based on its x and y coordinates
+        """
+
+        out_of_bounds_x = self._snake.head.x in (
+            Dimensions.WIDTH,
+            -Interface.BLOCK_SIZE,
+        )
+
+        out_of_bounds_y = self._snake.head.y in (
+            Dimensions.HEIGHT,
+            -Interface.BLOCK_SIZE,
+        )
+
+        if out_of_bounds_x or out_of_bounds_y:
+            self.game_running = False
