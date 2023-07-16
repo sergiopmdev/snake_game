@@ -94,3 +94,49 @@ class Snake:
             elif event.key == pygame.K_LEFT:
                 self.x_dir = -1 if self.x_dir != 1 else self.x_dir
                 self.y_dir = 0
+
+    def eat_apple(self, apple: Rect) -> bool:
+        """
+        Determines if the snake's head is colliding
+        with the given apple. If there is a collision,
+        the snake's body is extended by adding a new segment
+
+        Parameters
+        ----------
+        apple : Rect
+            The rectangular representation of the apple
+
+        Returns
+        -------
+        bool
+            True if the snake's head collides with the
+            apple and the body is extended,
+            False otherwise
+        """
+
+        same_x = self.head.x == apple.x
+        same_y = self.head.y == apple.y
+
+        if same_x and same_y:
+            snake_tail = self.body[0]
+
+            new_x = snake_tail.x
+            new_y = snake_tail.y
+
+            if self.x_dir == 1:
+                new_x -= Interface.BLOCK_SIZE
+            elif self.x_dir == -1:
+                new_x += Interface.BLOCK_SIZE
+            elif self.y_dir == 1:
+                new_y -= Interface.BLOCK_SIZE
+            elif self.y_dir == -1:
+                new_y += Interface.BLOCK_SIZE
+
+            self.body.insert(
+                0,
+                Rect(new_x, new_y, Interface.BLOCK_SIZE, Interface.BLOCK_SIZE),
+            )
+
+            return True
+
+        return False

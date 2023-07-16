@@ -46,6 +46,10 @@ class SnakeGame:
             self._draw_grid()
             self._plot_snake_and_apple()
             self._snake.move()
+
+            if self._snake.eat_apple(self._apple):
+                self._generate_apple()
+
             self._check_if_snake_out_of_bounds()
 
             pygame.display.update()
