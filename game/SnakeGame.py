@@ -1,3 +1,5 @@
+import random
+
 import pygame
 from pygame.event import Event
 
@@ -34,6 +36,7 @@ class SnakeGame:
         self._draw_grid()
 
         self._snake = Snake()
+        self._generate_apple()
 
         while self.game_running:
             for event in pygame.event.get():
@@ -41,7 +44,7 @@ class SnakeGame:
                 self._snake.change_direction(event=event)
 
             self._draw_grid()
-            self._plot_snake()
+            self._plot_snake_and_apple()
             self._snake.move()
             self._check_if_snake_out_of_bounds()
 
@@ -84,7 +87,7 @@ class SnakeGame:
         if event.type == pygame.QUIT:
             self.game_running = False
 
-    def _plot_snake(self) -> None:
+    def _plot_snake_and_apple(self) -> None:
         """
         Draw the snake in its corresponding
         position in the video game UI grid
@@ -94,6 +97,8 @@ class SnakeGame:
 
         for square in self._snake.body:
             pygame.draw.rect(self._display, "green", square)
+
+        pygame.draw.rect(self._display, "red", self._apple)
 
     def _check_if_snake_out_of_bounds(self) -> None:
         """
@@ -113,3 +118,37 @@ class SnakeGame:
 
         if out_of_bounds_x or out_of_bounds_y:
             self.game_running = False
+
+    def _generate_apple(self) -> None:
+        """
+        Generates an apple at a random position
+        on the grid excluding the positions
+        taken by the snake
+        """
+
+        x_numbers_to_exclude = []
+        y_numbers_to_exclude = []
+
+        x_numbers_to_exclude.append(self._snake.head.x)
+        y_numbers_to_exclude.append(self._snake.head.y)
+
+        for square in self._snake.body:
+            x_numbers_to_exclude.append(square.x)
+            y_numbers_to_exclude.append(square.y)
+
+        available_x_postions = list(
+            set(list(range(0, Dimensions.WIDTH, Interface.BLOCK_SIZE)))
+            - set(x_numbers_to_exclude)
+        )
+
+        available_y_postions = list(
+            set(list(range(0, Dimensions.HEIGHT, Interface.BLOCK_SIZE)))
+            - set(y_numbers_to_exclude)
+        )
+
+        x_apple = random.choice(available_x_postions)
+        y_apple = random.choice(available_y_postions)
+
+        self._apple = pygame.Rect(
+            x_apple, y_apple, Interface.BLOCK_SIZE, Interface.BLOCK_SIZE
+        )
