@@ -140,3 +140,18 @@ class Snake:
             return True
 
         return False
+
+    def check_self_collision(self) -> bool:
+        """
+        Check if the snake's head collides with its body
+
+        Returns
+        -------
+        bool
+            True if there is a self-collision, False otherwise
+        """
+
+        head_position = (self.head.x, self.head.y)
+        body_positions = [(square.x, square.y) for square in self.body]
+
+        return head_position in body_positions

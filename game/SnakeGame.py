@@ -47,6 +47,9 @@ class SnakeGame:
             self._plot_snake_and_apple()
             self._snake.move()
 
+            if self._snake.check_self_collision():
+                self.game_running = False
+
             if self._snake.eat_apple(self._apple):
                 self._generate_apple()
 
